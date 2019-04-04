@@ -1,0 +1,77 @@
+<!doctype HTML>
+<html>
+<head>
+</head>
+<body>
+	<script>
+		//source: https://www.abeautifulsite.net/adding-and-removing-elements-on-the-fly-using-javascript
+		function addElement(parentId, elementTag, elementId, html) {
+	    // Adds an element to the document
+		    var p = document.getElementById(parentId);
+		    var newElement = document.createElement(elementTag);
+		    newElement.setAttribute('id', elementId);
+		    newElement.innerHTML = html;
+		    p.appendChild(newElement);
+		}	
+
+		//source: https://www.abeautifulsite.net/adding-and-removing-elements-on-the-fly-using-javascript
+		function removeElement(elementId) {
+		// Removes an element from the document
+		    var element = document.getElementById(elementId);
+		    if (element) {
+		    	element.parentNode.removeChild(element);
+		    }
+		    
+		}
+
+		function calculate() {
+			//Get values from inputs
+			var discount = document.getElementById('discount').value
+			discount = parseFloat(discount)
+			var payment = document.getElementById('payment').value
+			payment = parseFloat(payment)
+
+			console.log(discount)
+			console.log(payment)
+
+			// delete any added element
+			removeElement('discount-error')
+			removeElement('payment-error')
+
+			// wipe old total
+			document.getElementById('total').innerHTML = ''
+
+			// validate inputs
+			if (isNaN(discount)) {
+				addElement('error', 'span', 'discount-error', 'Discount must be a number<br />')
+				document.getElementById('discount-error').style = 'color:red'
+				discount = 0
+			}
+			if (isNaN(payment)) {
+				addElement('error', 'span', 'payment-error', 'Payment must be a number<br />')
+				document.getElementById('payment-error').style = 'color:red'
+				payment = 0
+			}
+
+			// convert discount to a decimal
+			discount = discount / 100
+
+			// calculate total
+			var total = payment / (1 - discount)
+			total = Math.round(total * 100) / 100
+
+			// print total
+			var output = document.getElementById('total')
+			output.innerHTML = total
+		}
+	</script>
+	<h2>Payment Calculator</h2>
+	<div>
+		<button onClick="calculate()" type="button" class="calculate">Calculate</button><br />
+		Discount <input type="text" id="discount" size="4" value="3.3"/>%<br />
+		Payment $<input type="text" id="payment" size="6"/><br />
+		<b>Total Amount: $<span id="total"></span></b>
+		<div id="error"></div>
+	</div>
+</body>
+</html>
